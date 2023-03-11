@@ -32,7 +32,7 @@ class Mandelbrot:
             elif mask_region == 'outer':
                 mas = np.abs(self.zn) > 2
             else:
-                pass # TODO RAISE ERROR
+                pass # TODO RAISE ERROR AND ADD CUSTOM MAX
 
             self.zn = np.where(mask,quadratic_map(self.zn, self.domain), self.zn)
         else:
