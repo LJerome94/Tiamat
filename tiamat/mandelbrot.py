@@ -48,7 +48,7 @@ class Mandelbrot:
             self.next_iteration(use_mask, mask_region)
 
             if callback != None:
-                pass # TODO Ajouter le callback
+                self._escape_time_callback()
 
     def next_iteration(self, use_mask=False, mask_region='inner') -> None:
 
@@ -64,8 +64,19 @@ class Mandelbrot:
         else:
             self.zn = quadratic_map(self.zn, self.domain)
 
-    def escape_time(self, max_iteration_index) -> None:
+    def compute_escape_time(self, max_iteration_index) -> None:
+        self.escape_time = np.zeros(self.domain.shape)
         self.iterate(max_iteration_index, use_mask=True, callback=self._escape_time_callback)
 
     def _escape_time_callback(self):
         self.escape_time = np.where(np.abs(self.zn)<2, self.escape_time+1, self.escape_time) # TODO Tester ça ici
+
+
+def orbit(start_point: complex, num_iteration: int) -> np.ndarray:
+    Z = np.zeros(num_iteration, dtype=complex)
+    Z[0] = start_point
+
+    for i in range(1, num_iteration):
+        Z[i] = quadratic_map(Z[i-1], start_point)
+
+    return Z
