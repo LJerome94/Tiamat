@@ -10,11 +10,11 @@ from tiamat import mandelbrot as mb
 from tiamat.plot import Plot
 
 #M = mandelbrot.Mandelbrot((-0.75-.4,0-.4),(-.325+0.2,.325+0.2),0.001)
-#M = mb.Mandelbrot((-2,1),(-1.5,1.5),0.001)
+M = mb.Mandelbrot((-2,1),(-1.5,1.5),0.1)
 
 #M.iterate(30, use_mask=True)
-#M.compute_escape_time(30)
-
+M.compute_escape_time(2)
+M.save()
 #Z = mb.orbit(0.27+0.55j,20)
 
 #fig = plt.figure()
@@ -29,10 +29,10 @@ from tiamat.plot import Plot
 #fig.savefig("test_zoom.png")
 
 
-p = Plot()
+#p = Plot()
 
-p.plot_test()
+#p.plot_test()
 
-p.save()
+#p.save()
 
 print(f"End of program: {time.time()-t0}")

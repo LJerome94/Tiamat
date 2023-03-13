@@ -12,6 +12,7 @@ class Mandelbrot:
     zn: np.ndarray
     escape_radius: float
     escape_time: np.ndarray
+    res:float
 
     def __init__(self,
                  x_bounds: tuple[float, float],
@@ -22,17 +23,13 @@ class Mandelbrot:
         TODO
         """
 
-        #x_min = x_bounds[0]
-        #x_max = x_bounds[1]
+        self.x_min, self.x_max = x_bounds
+        self.y_min, self.y_max = y_bounds
 
-        x_min, x_max = x_bounds
-        y_min, y_max = y_bounds
+        self.res = res
 
-        #y_min = y_bounds[0]
-        #y_max = y_bounds[1]
-
-        X = np.arange(x_min, x_max, res)
-        Y = np.arange(y_min, y_max, res)
+        X = np.arange(self.x_min, self.x_max, self.res)
+        Y = np.arange(self.y_min, self.y_max, self.res)
 
         X, Y = np.meshgrid(X,Y)
 
@@ -44,6 +41,7 @@ class Mandelbrot:
         self.step = 0
 
         self.escape_time = None
+
 
     def iterate(self,
                 iteration_index,
@@ -61,6 +59,7 @@ class Mandelbrot:
 
             if callback != None:
                 self._escape_time_callback()
+
 
     def next_iteration(self,
                        use_mask=False,
@@ -84,6 +83,8 @@ class Mandelbrot:
             self.zn = np.where(mask,quadratic_map(self.zn, self.domain), self.zn)
         else:
             self.zn = quadratic_map(self.zn, self.domain)
+        self.step += 1
+
 
     def compute_escape_time(self, max_iteration_number: int) -> None:
         """Performs an equivalent version of the escape time algorithm.
@@ -102,18 +103,31 @@ class Mandelbrot:
                      use_mask=True,
                      callback=self._escape_time_callback)
 
+
     def _escape_time_callback(self) -> None:
         """
         TODO
         """
 
-        self.escape_time = np.where(np.abs(self.zn)<2, self.escape_time+1, self.escape_time) # TODO Tester ça ici
+        self.escape_time = np.where(np.abs(self.zn)<2, # Condition
+                                    self.escape_time+1, # If true
+                                    self.escape_time) # If false
 
-    def save(self, directory) -> None:
+
+    def save(self, path: str="./") -> None:
         """
         TODO
         """
-        pass # TODO
+
+        params_string = f"x_{self.x_min}_{self.x_max}_y_{self.y_min}_{self.y_max}_res_{self.res}_step_{self.step}"
+
+        if self.escape_time is None:
+            saved_array = self.zn
+        else:
+            saved_array = np.concatenate((self.zn[np.newaxis, :],
+                                          self.escape_time[np.newaxis,:]))
+
+        np.save(f"{path}/mandelbrot_{params_string}", saved_array) # TODO Checker que ça existe
 
 
 def orbit(start_point: np.complex128, num_iteration: int) -> np.ndarray: # WARNING Vérifier le data type requis

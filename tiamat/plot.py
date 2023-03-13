@@ -13,12 +13,12 @@ class Plot:
         n_cols=1
         #with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
         #    self.figure, self.axis = plt.subplots(nrows=n_rows, ncols=n_cols) # TODO Move this elsewhere
+
         self.figure = None
         self.axis = None
 
     def save(self, directory: str='./plot.png') -> None:
         self.figure.savefig(directory)
-
 
     def plot_test(self):
         #with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
