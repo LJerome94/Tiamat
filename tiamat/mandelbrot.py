@@ -18,12 +18,18 @@ class Mandelbrot:
                  y_bounds: tuple[float, float],
                  res: float,
                  escape_radius: float=2):
+        """
+        TODO
+        """
 
-        x_min = x_bounds[0]
-        x_max = x_bounds[1]
+        #x_min = x_bounds[0]
+        #x_max = x_bounds[1]
 
-        y_min = y_bounds[0]
-        y_max = y_bounds[1]
+        x_min, x_max = x_bounds
+        y_min, y_max = y_bounds
+
+        #y_min = y_bounds[0]
+        #y_max = y_bounds[1]
 
         X = np.arange(x_min, x_max, res)
         Y = np.arange(y_min, y_max, res)
@@ -44,13 +50,28 @@ class Mandelbrot:
                 use_mask=False,
                 mask_region='inner',
                 callback=None)-> None:
+        """Iterates the quadratic map over the specified domain.
+
+        Parameters
+        ----------
+        TODO
+        """
         for i in range(iteration_index):
             self.next_iteration(use_mask, mask_region)
 
             if callback != None:
                 self._escape_time_callback()
 
-    def next_iteration(self, use_mask=False, mask_region='inner') -> None:
+    def next_iteration(self,
+                       use_mask=False,
+                       mask_region='inner') -> None:
+        """Performs one iteration of the qaudratic map over the specified
+        domain.
+
+        Parameters
+        ----------
+        TODO
+        """
 
         if use_mask:
             if mask_region == 'inner':
@@ -64,16 +85,39 @@ class Mandelbrot:
         else:
             self.zn = quadratic_map(self.zn, self.domain)
 
-    def compute_escape_time(self, max_iteration_index) -> None:
-        self.escape_time = np.zeros(self.domain.shape)
-        self.iterate(max_iteration_index, use_mask=True, callback=self._escape_time_callback)
+    def compute_escape_time(self, max_iteration_number: int) -> None:
+        """Performs an equivalent version of the escape time algorithm.
+        To do so, it uses `iterate` paired with `_escape_time_back` to check if
+        an orbit as reached beyond the escape radius.
 
-    def _escape_time_callback(self):
+        Parameters
+        ----------
+        max_iteration_index : int
+            The maximum number of iteration to perform.
+        """
+
+        self.escape_time = np.zeros(self.domain.shape)
+
+        self.iterate(max_iteration_number,
+                     use_mask=True,
+                     callback=self._escape_time_callback)
+
+    def _escape_time_callback(self) -> None:
+        """
+        TODO
+        """
+
         self.escape_time = np.where(np.abs(self.zn)<2, self.escape_time+1, self.escape_time) # TODO Tester ça ici
 
+    def save(self, directory) -> None:
+        """
+        TODO
+        """
+        pass # TODO
 
-def orbit(start_point: complex, num_iteration: int) -> np.ndarray:
-    Z = np.zeros(num_iteration, dtype=complex)
+
+def orbit(start_point: np.complex128, num_iteration: int) -> np.ndarray: # WARNING Vérifier le data type requis
+    Z = np.zeros(num_iteration, dtype=np.complex128)
     Z[0] = start_point
 
     for i in range(1, num_iteration):
