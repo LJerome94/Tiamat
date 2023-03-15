@@ -1,14 +1,21 @@
+"""
+TODO HEADER
+"""
+
 import numpy as np
 from rich.progress import track
 
 
 class Mandelbrot:
+    """
+    TODO Documentation
+    """
 
     step: int
     domain: np.ndarray
     zn: np.ndarray
     escape_time: np.ndarray
-    #res:float
+    #res:float # TODO Save the mask between iterations
 
     def __init__(self,
                  x_bounds: tuple[float, float],
@@ -26,11 +33,12 @@ class Mandelbrot:
         X = np.arange(x_min, x_max, res)
         Y = np.arange(y_min, y_max, res)
 
-        self.Cx, self.Cy = np.meshgrid(X,Y) # WARNING
-        self.X, self.Y = np.meshgrid(X,Y) # WARNING
+        X, Y = np.meshgrid(X, Y)
 
         self.domain = X + Y * 1.j
         self.zn = self.domain.copy()
+
+        self.mask = self.squared_magnitude() < 4
 
         self.step = 0
 
@@ -47,11 +55,12 @@ class Mandelbrot:
         """
 
         if use_mask:
-            mask = self.squared_magnitude() < 4
+            #mask = self.squared_magnitude() < 4
 
-            self.zn = np.where(mask, # Condition
-                               self.quadratic_map(self.zn, self.domain), # If True
+            self.zn = np.where(self.mask, # Condition
+                               quadratic_map(self.zn, self.domain), # If True
                                self.zn) # If false
+            self.mask = self.squared_magnitude() < 4
         else:
             self.zn = self.quadratic_map(self.zn, self.domain)
 
@@ -78,9 +87,39 @@ class Mandelbrot:
         for i in track(range(max_iteration_number)):
             self.next_iteration(True)
 
-            self.escape_time = np.where(self.squared_magnitude() < 4, # Condition
+            self.escape_time = np.where(self.mask, # Condition
                                         self.escape_time + 1, # If true
                                         self.escape_time) # If false
+
+    # def compute_escape_time_real(self, N):
+
+    #     x = self.zn.real
+    #     y = self.zn.imag
+
+    #     self.escape_time = np.zeros(x.shape)
+
+    #     for i in track(range(N)):
+    #         mask = x * x + y * y < 4
+    #         #self.X = np.where(mask,
+    #         #                    x * x - y * y + self.Cx,
+    #         #                    x)
+    #         #self.Y = np.where(mask,
+    #         #                    2 * x * y + self.Cy,
+    #         #                    y)
+
+    #         zn = np.where(mask,
+    #                       x * x - y * y + 2j * x * y,
+    #                       self.zn)
+
+    #         x = zn.real
+    #         y = zn.imag
+
+    #         self.zn = zn
+
+    #         mask = x * x + y * y < 4
+    #         self.escape_time = np.where(mask,
+    #                                     self.escape_time+1,
+    #                                     self.escape_time)
 
 
     def squared_magnitude(self) -> np.ndarray:
