@@ -1,4 +1,5 @@
 import numpy as np
+from rich.progress import track
 
 
 def quadratic_map(z, c):
@@ -54,7 +55,7 @@ class Mandelbrot:
         ----------
         TODO
         """
-        for i in range(iteration_index):
+        for i in track(range(iteration_index)):
             self.next_iteration(use_mask, mask_region)
 
             if callback != None:
