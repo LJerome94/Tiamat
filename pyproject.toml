@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "tiamat"
 version = "0.1.0"
-description = ""
+description = "A toolkit for the study of the Mandelbrot set."
 authors = ["Jerome Leblanc"]
 license = "MIT"
 readme = "README.md"
@@ -12,6 +12,7 @@ numpy = ">=1.18,<1.24"
 matplotlib = "^3.6.3"
 cmasher = "^1.6.3"
 rich = "^13.3.2"
+numba = "^0.56.4"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.20.2"

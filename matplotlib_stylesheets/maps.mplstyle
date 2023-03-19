@@ -636,20 +636,6 @@ contour.linewidth:          0.2    # {float, None} Size of the contour line
 
 
 ## ***************************************************************************
-## * AGG RENDERING                                                           *
-## ***************************************************************************
-## Warning: experimental, 2008/10/10
-#agg.path.chunksize: 0  # 0 to disable; values in the range
-                        # 10000 to 100000 can improve speed slightly
-                        # and prevent an Agg rendering failure
-                        # when plotting very large data sets,
-                        # especially if they are very gappy.
-                        # It may cause minor artifacts, though.
-                        # A value of 20000 is probably a good
-                        # starting point.
-
-
-## ***************************************************************************
 ## * PATHS                                                                   *
 ## ***************************************************************************
 #path.simplify: True  # When True, simplify paths by removing "invisible"
@@ -732,31 +718,6 @@ savefig.bbox:      tight    # {tight, standard}
 
 ### docstring params
 #docstring.hardcopy: False  # set this when you want to generate hardcopy docstring
-
-
-## ***************************************************************************
-## * INTERACTIVE KEYMAPS                                                     *
-## ***************************************************************************
-## Event keys to interact with figures/plots via keyboard.
-## See https://matplotlib.org/stable/users/explain/interactive.html for more
-## details on interactive navigation.  Customize these settings according to
-## your needs. Leave the field(s) empty if you don't need a key-map. (i.e.,
-## fullscreen : '')
-#keymap.fullscreen: f, ctrl+f   # toggling
-#keymap.home: h, r, home        # home or reset mnemonic
-#keymap.back: left, c, backspace, MouseButton.BACK  # forward / backward keys
-#keymap.forward: right, v, MouseButton.FORWARD      # for quick navigation
-#keymap.pan: p                  # pan mnemonic
-#keymap.zoom: o                 # zoom mnemonic
-#keymap.save: s, ctrl+s         # saving current figure
-#keymap.help: f1                # display help about active tools
-#keymap.quit: ctrl+w, cmd+w, q  # close the current figure
-#keymap.quit_all:               # close all figures
-#keymap.grid: g                 # switching on/off major grids in current axes
-#keymap.grid_minor: G           # switching on/off minor grids in current axes
-#keymap.yscale: l               # toggle scaling of y-axes ('log'/'linear')
-#keymap.xscale: k, L            # toggle scaling of x-axes ('log'/'linear')
-#keymap.copy: ctrl+c, cmd+c     # copy figure to clipboard
 
 
 ## ***************************************************************************

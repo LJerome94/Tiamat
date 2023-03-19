@@ -12,8 +12,8 @@ from tiamat.plot import Plot
 #M = mandelbrot.Mandelbrot((-0.75-.4,0-.4),(-.325+0.2,.325+0.2),0.001)
 
 t0 = time.time()
-M = mb.Mandelbrot((-2,1),(-1.5,1.5),0.001)
-M.compute_escape_time(20)
+M = mb.Mandelbrot((-2,1),(0,1.5),0.001)
+M.compute_escape_time(100)
 t1 = time.time()
 #M.save()
 #Z = mb.orbit(0.27+0.55j,20)
@@ -27,7 +27,7 @@ t1 = time.time()
 #plt.plot(Z.real, Z.imag)
 
 #plt.axis("off")
-#fig.savefig("test.png", dpi=1200)
+#fig.savefig("new_meshgrid.png", dpi=1200)
 
 #p = Plot()
 

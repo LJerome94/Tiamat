@@ -2,7 +2,10 @@
 TODO HEADER
 """
 
+import numba
 import numpy as np
+from numba import jit
+from rich import print
 from rich.progress import track
 
 
@@ -15,6 +18,7 @@ class Mandelbrot:
     domain: np.ndarray
     zn: np.ndarray
     escape_time: np.ndarray
+    mask: np.ndarray
     #res:float # TODO Save the mask between iterations
 
     def __init__(self,
@@ -28,7 +32,7 @@ class Mandelbrot:
         x_min, x_max = x_bounds
         y_min, y_max = y_bounds
 
-        res = res
+        #res = res
 
         X = np.arange(x_min, x_max, res)
         Y = np.arange(y_min, y_max, res)
@@ -38,11 +42,11 @@ class Mandelbrot:
         self.domain = X + Y * 1.j
         self.zn = self.domain.copy()
 
-        self.mask = self.squared_magnitude() < 4
+        self.mask = squared_magnitude(self.zn) < 4
 
         self.step = 0
 
-        self.escape_time = None
+        self.escape_time = np.zeros(self.domain.shape)
 
 
     def next_iteration(self, use_mask: bool) -> None:
@@ -55,20 +59,14 @@ class Mandelbrot:
         """
 
         if use_mask:
-            #mask = self.squared_magnitude() < 4
-
             self.zn = np.where(self.mask, # Condition
                                quadratic_map(self.zn, self.domain), # If True
                                self.zn) # If false
-            self.mask = self.squared_magnitude() < 4
+            self.mask = squared_magnitude(self.zn) < 4
         else:
-            self.zn = self.quadratic_map(self.zn, self.domain)
+            self.zn = quadratic_map(self.zn, self.domain)
 
         self.step += 1
-
-
-    def quadratic_map(self, z:np.ndarray, c:np.ndarray) -> np.ndarray:
-        return z * z + c # WARNING
 
 
     def compute_escape_time(self, max_iteration_number: int) -> None:
@@ -82,55 +80,12 @@ class Mandelbrot:
             The maximum number of iteration to perform.
         """
 
-        self.escape_time = np.zeros(self.domain.shape)
-
-        for i in track(range(max_iteration_number)):
+        for i in track(range(max_iteration_number), "Computing escape time..."):
             self.next_iteration(True)
 
             self.escape_time = np.where(self.mask, # Condition
                                         self.escape_time + 1, # If true
                                         self.escape_time) # If false
-
-    # def compute_escape_time_real(self, N):
-
-    #     x = self.zn.real
-    #     y = self.zn.imag
-
-    #     self.escape_time = np.zeros(x.shape)
-
-    #     for i in track(range(N)):
-    #         mask = x * x + y * y < 4
-    #         #self.X = np.where(mask,
-    #         #                    x * x - y * y + self.Cx,
-    #         #                    x)
-    #         #self.Y = np.where(mask,
-    #         #                    2 * x * y + self.Cy,
-    #         #                    y)
-
-    #         zn = np.where(mask,
-    #                       x * x - y * y + 2j * x * y,
-    #                       self.zn)
-
-    #         x = zn.real
-    #         y = zn.imag
-
-    #         self.zn = zn
-
-    #         mask = x * x + y * y < 4
-    #         self.escape_time = np.where(mask,
-    #                                     self.escape_time+1,
-    #                                     self.escape_time)
-
-
-    def squared_magnitude(self) -> np.ndarray:
-        """
-        TODO DOCUMENTATION
-        """
-
-        x, y = self.zn.real, self.zn.imag
-
-        return x * x + y * y
-
 
     # def save(self, path: str="./") -> None:
 
@@ -145,9 +100,20 @@ class Mandelbrot:
     #     np.save(f"{path}/mandelbrot_{params_string}", saved_array) # TODO Checker que ça existe
 
 
-
-def quadratic_map(z, c):
+@jit(nopython=True)
+def quadratic_map(z, c): # TODO Vectorize?
+    """
+    TODO Documentation
+    """
     return z*z+c
+
+@jit(nopython=True)
+def squared_magnitude(z: np.ndarray) -> np.ndarray:
+    """
+    TODO DOCUMENTATION
+    """
+    x, y = z.real, z.imag
+    return x * x + y * y
 
 
 def orbit(start_point: np.complex128, num_iteration: int) -> np.ndarray: # WARNING Vérifier le data type requis
