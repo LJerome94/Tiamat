@@ -42,11 +42,39 @@ class Mandelbrot:
         self.domain = X + Y * 1.j
         self.zn = self.domain.copy()
 
-        self.mask = squared_magnitude(self.zn) < 4
+        #self.mask = squared_magnitude(self.zn) < 4
+        self.mask = None
+        self.cardioid_mask = None
 
         self.step = 0
 
-        self.escape_time = np.zeros(self.domain.shape)
+        self.escape_time = None
+        self.lyapunov = None
+
+
+    def make_cardioid_mask(self) -> None:
+        """
+        TODO
+        """
+        # Main cardioid
+        a=1/2
+        imag = self.domain.imag
+        reals_card = self.domain.real-1/4
+        x2 = reals_card * reals_card
+        y2 = imag * imag
+        norm = x2 + y2
+        LHS = (norm + a*reals_card)
+        mask_card = (LHS * LHS > a*a*norm)
+
+        # Main circle
+        reals_circ = self.domain.real + 1
+        norm_circ = reals_circ * reals_circ + imag * imag
+        mask_circ = norm_circ > (1/16)
+
+
+        self.cardioid_mask = (LHS * LHS > a*a*norm) * mask_circ
+        #self.cardioid_mask =  mask_card
+
 
 
     def next_iteration(self, use_mask: bool) -> None:
@@ -59,7 +87,7 @@ class Mandelbrot:
         """
 
         if use_mask:
-            self.zn = np.where(self.mask, # Condition
+            self.zn = np.where(self.mask*self.cardioid_mask, # Condition
                                quadratic_map(self.zn, self.domain), # If True
                                self.zn) # If false
             self.mask = squared_magnitude(self.zn) < 4
@@ -79,11 +107,15 @@ class Mandelbrot:
         max_iteration_index : int
             The maximum number of iteration to perform.
         """
+        self.mask = squared_magnitude(self.zn) < 4
+        self.make_cardioid_mask()
+
+        self.escape_time = np.zeros(self.domain.shape)
 
         for i in track(range(max_iteration_number), "Computing escape time..."):
             self.next_iteration(True)
 
-            self.escape_time = np.where(self.mask, # Condition
+            self.escape_time = np.where(self.mask*self.cardioid_mask, # Condition
                                         self.escape_time + 1, # If true
                                         self.escape_time) # If false
 

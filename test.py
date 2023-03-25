@@ -12,22 +12,23 @@ from tiamat.plot import Plot
 #M = mandelbrot.Mandelbrot((-0.75-.4,0-.4),(-.325+0.2,.325+0.2),0.001)
 
 t0 = time.time()
-M = mb.Mandelbrot((-2,1),(0,1.5),0.001)
+M = mb.Mandelbrot((-2,1),(0,1.5),0.01)
 M.compute_escape_time(100)
 t1 = time.time()
 #M.save()
 #Z = mb.orbit(0.27+0.55j,20)
 
-#fig = plt.figure()
-#plt.imshow(M.escape_time, cmap=cm.horizon)
-#plt.colorbar()
+fig = plt.figure()
+plt.imshow(M.escape_time, cmap=cm.horizon)
+plt.colorbar()
+#axis[0].colorbar()
 
-#plt.contour(M.domain.real, M.domain.imag, 1*(np.abs(M.zn)<2), cmap='binary')
+#plt.contour(1*M.cardioid_mask)
 
 #plt.plot(Z.real, Z.imag)
 
 #plt.axis("off")
-#fig.savefig("new_meshgrid.png", dpi=1200)
+fig.savefig("cardioid.png", dpi=600)
 
 #p = Plot()
 
