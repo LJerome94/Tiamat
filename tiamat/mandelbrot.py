@@ -2,10 +2,8 @@
 TODO HEADER
 """
 
-import numba
 import numpy as np
 from numba import jit
-from rich import print
 from rich.progress import track
 
 
@@ -19,7 +17,7 @@ class Mandelbrot:
     zn: np.ndarray
     escape_time: np.ndarray
     mask: np.ndarray
-    #res:float # TODO Save the mask between iterations
+    res:float
 
     def __init__(self,
                  x_bounds: tuple[float, float],
@@ -29,20 +27,19 @@ class Mandelbrot:
         TODO
         """
 
-        x_min, x_max = x_bounds
-        y_min, y_max = y_bounds
+        self.x_min, self.x_max = x_bounds
+        self.y_min, self.y_max = y_bounds
 
-        #res = res
+        self.res = res
 
-        X = np.arange(x_min, x_max, res)
-        Y = np.arange(y_min, y_max, res)
+        X = np.arange(self.x_min, self.x_max, res)
+        Y = np.arange(self.y_min, self.y_max, res)
 
         X, Y = np.meshgrid(X, Y)
 
         self.domain = X + Y * 1.j
         self.zn = self.domain.copy()
 
-        #self.mask = squared_magnitude(self.zn) < 4
         self.mask = None
         self.cardioid_mask = None
 
@@ -66,15 +63,13 @@ class Mandelbrot:
         LHS = (norm + a*reals_card)
         mask_card = (LHS * LHS > a*a*norm)
 
-        # Main circle
+        # Main bulb
         reals_circ = self.domain.real + 1
         norm_circ = reals_circ * reals_circ + imag * imag
         mask_circ = norm_circ > (1/16)
 
 
-        self.cardioid_mask = (LHS * LHS > a*a*norm) * mask_circ
-        #self.cardioid_mask =  mask_card
-
+        self.cardioid_mask = mask_card * mask_circ
 
 
     def next_iteration(self, use_mask: bool) -> None:
@@ -110,26 +105,30 @@ class Mandelbrot:
         self.mask = squared_magnitude(self.zn) < 4
         self.make_cardioid_mask()
 
-        self.escape_time = np.zeros(self.domain.shape)
+        self.escape_time = np.zeros(self.domain.shape, dtype=int)
+        self.step=0
 
-        for i in track(range(max_iteration_number), "Computing escape time..."):
+        progress_str = f"Computing escape time for {max_iteration_number} iterations..."
+        for i in track(range(max_iteration_number), progress_str):
             self.next_iteration(True)
 
             self.escape_time = np.where(self.mask*self.cardioid_mask, # Condition
                                         self.escape_time + 1, # If true
                                         self.escape_time) # If false
 
-    # def save(self, path: str="./") -> None:
+        # Add maximum values in the cardioid and the first bulb
+        self.escape_time = np.where(self.cardioid_mask, # Condition
+                                    self.escape_time, # If true
+                                    max_iteration_number) # If false
 
-    #     params_string = f"x_{self.x_min}_{self.x_max}_y_{self.y_min}_{self.y_max}_res_{self.res}_step_{self.step}"
+    def save(self, attribute: str, path: str="./") -> None:
 
-    #     if self.escape_time is None:
-    #         saved_array = self.zn
-    #     else:
-    #         saved_array = np.concatenate((self.zn[np.newaxis, :],
-    #                                       self.escape_time[np.newaxis,:]))
+        params_string = f"x_{self.x_min}_{self.x_max}_y_{self.y_min}_{self.y_max}_res_{self.res}_step_{self.step}"
 
-    #     np.save(f"{path}/mandelbrot_{params_string}", saved_array) # TODO Checker que ça existe
+        saved_array = getattr(self, attribute)
+
+        np.save(f"{path}/mandelbrot_{attribute}_{params_string}", saved_array, allow_pickle=False) # TODO Checker que ça existe
+        #np.save(f"{path}/mandelbrot_{attribute}_{params_string}", saved_array) # TODO Checker que ça existe
 
 
 @jit(nopython=True)
