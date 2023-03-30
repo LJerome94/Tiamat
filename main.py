@@ -40,7 +40,7 @@ def process():
                     M.compute_escape_time(N)
                 elif attribute == 'lyapunov':
                     pass # TODO Faire l'exposant de lyapunov
-                print("Saveing data...")
+                print("Saving data...")
                 M.save(attribute, path="./data")
 
 if __name__ == '__main__':

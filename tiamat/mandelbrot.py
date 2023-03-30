@@ -128,7 +128,6 @@ class Mandelbrot:
         saved_array = getattr(self, attribute)
 
         np.save(f"{path}/mandelbrot_{attribute}_{params_string}", saved_array, allow_pickle=False) # TODO Checker que ça existe
-        #np.save(f"{path}/mandelbrot_{attribute}_{params_string}", saved_array) # TODO Checker que ça existe
 
 
 @jit(nopython=True)
