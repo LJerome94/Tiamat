@@ -23,8 +23,17 @@ class Mandelbrot:
                  x_bounds: tuple[float, float],
                  y_bounds: tuple[float, float],
                  res: float):
-        """
-        TODO
+        """Constructs a Mandelbrot object given the provided complex domain.
+
+        Paramters
+        ---------
+        x_bounds : tuple[float]
+            The bounds of the real parts of the domain C.
+        y_bounds : tuple[float]
+            The bounds of the imaginary parts of the domain C.
+        res: float
+            The resolution of the domain. It corresponds to the spacing between
+            pixels both on x and y axies.
         """
 
         self.x_min, self.x_max = x_bounds
@@ -78,7 +87,9 @@ class Mandelbrot:
 
         Parameters
         ----------
-        TODO
+        use_mask: bool
+            Whether to use logic masks on the involved arrays in order to avoid
+            some redundant computations
         """
 
         if use_mask:
@@ -146,7 +157,10 @@ def squared_magnitude(z: np.ndarray) -> np.ndarray:
     return x * x + y * y
 
 
-def orbit(start_point: np.complex128, num_iteration: int) -> np.ndarray: # WARNING Vérifier le data type requis
+def orbit(start_point: np.complex128, num_iteration: int) -> np.ndarray:
+    """
+    # TODO DOCUMENTATION
+    """
     Z = np.zeros(num_iteration, dtype=np.complex128)
     Z[0] = start_point
 

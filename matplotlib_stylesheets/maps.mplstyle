@@ -113,7 +113,7 @@
 ## ***************************************************************************
 ## See https://matplotlib.org/stable/api/artist_api.html#module-matplotlib.lines
 ## for more information on line properties.
-lines.linewidth: 0.5               # line width in points
+lines.linewidth: 0.8              # line width in points
 #lines.linestyle: -                 # solid line
 #lines.color:     C0                # has no affect on plot(); see axes.prop_cycle
 lines.marker:          None        # the default marker
@@ -158,54 +158,6 @@ lines.marker:          None        # the default marker
 ## ***************************************************************************
 #hatch.color:     black
 #hatch.linewidth: 1.0
-
-
-## ***************************************************************************
-## * BOXPLOT                                                                 *
-## ***************************************************************************
-#boxplot.notch:       False
-#boxplot.vertical:    True
-#boxplot.whiskers:    1.5
-#boxplot.bootstrap:   None
-#boxplot.patchartist: False
-#boxplot.showmeans:   False
-#boxplot.showcaps:    True
-#boxplot.showbox:     True
-#boxplot.showfliers:  True
-#boxplot.meanline:    False
-
-#boxplot.flierprops.color:           black
-#boxplot.flierprops.marker:          o
-#boxplot.flierprops.markerfacecolor: none
-#boxplot.flierprops.markeredgecolor: black
-#boxplot.flierprops.markeredgewidth: 1.0
-#boxplot.flierprops.markersize:      6
-#boxplot.flierprops.linestyle:       none
-#boxplot.flierprops.linewidth:       1.0
-
-#boxplot.boxprops.color:     black
-#boxplot.boxprops.linewidth: 1.0
-#boxplot.boxprops.linestyle: -
-
-#boxplot.whiskerprops.color:     black
-#boxplot.whiskerprops.linewidth: 1.0
-#boxplot.whiskerprops.linestyle: -
-
-#boxplot.capprops.color:     black
-#boxplot.capprops.linewidth: 1.0
-#boxplot.capprops.linestyle: -
-
-#boxplot.medianprops.color:     C1
-#boxplot.medianprops.linewidth: 1.0
-#boxplot.medianprops.linestyle: -
-
-#boxplot.meanprops.color:           C2
-#boxplot.meanprops.marker:          ^
-#boxplot.meanprops.markerfacecolor: C2
-#boxplot.meanprops.markeredgecolor: C2
-#boxplot.meanprops.markersize:       6
-#boxplot.meanprops.linestyle:       --
-#boxplot.meanprops.linewidth:       1.0
 
 
 ## ***************************************************************************
@@ -310,13 +262,13 @@ font.serif:      Charter, DejaVu Serif, Bitstream Vera Serif, Computer Modern Ro
 ## ***************************************************************************
 ## For more information on LaTeX properties, see
 ## https://matplotlib.org/stable/tutorials/text/usetex.html
-#text.usetex: False  # use latex for all text handling. The following fonts
+text.usetex: False  # use latex for all text handling. The following fonts
                      # are supported through the usual rc parameter settings:
                      # new century schoolbook, bookman, times, palatino,
                      # zapf chancery, charter, serif, sans-serif, helvetica,
                      # avant garde, courier, monospace, computer modern roman,
                      # computer modern sans serif, computer modern typewriter
-#text.latex.preamble:   # IMPROPER USE OF THIS FEATURE WILL LEAD TO LATEX FAILURES
+text.latex.preamble: \usepackage[charter,cal=cmcal]{mathdesign}   # IMPROPER USE OF THIS FEATURE WILL LEAD TO LATEX FAILURES
                         # AND IS THEREFORE UNSUPPORTED. PLEASE DO NOT ASK FOR HELP
                         # IF THIS FEATURE DOES NOT DO WHAT YOU EXPECT IT TO.
                         # text.latex.preamble is a single line of LaTeX code that
@@ -333,23 +285,23 @@ font.serif:      Charter, DejaVu Serif, Bitstream Vera Serif, Computer Modern Ro
                         # loaded, depending on your font settings.
 
 ## The following settings allow you to select the fonts in math mode.
-#mathtext.fontset: dejavusans  # Should be 'dejavusans' (default),
+mathtext.fontset: custom  # Should be 'dejavusans' (default),
                                # 'dejavuserif', 'cm' (Computer Modern), 'stix',
                                # 'stixsans' or 'custom'
 ## "mathtext.fontset: custom" is defined by the mathtext.bf, .cal, .it, ...
 ## settings which map a TeX font name to a fontconfig font pattern.  (These
 ## settings are not used for other font sets.)
-#mathtext.bf:  sans:bold
+mathtext.bf:  serif:bold
 #mathtext.cal: cursive
-#mathtext.it:  sans:italic
-#mathtext.rm:  sans
+mathtext.it:  serif:italic
+mathtext.rm:  serif
 #mathtext.sf:  sans
 #mathtext.tt:  monospace
 #mathtext.fallback: cm  # Select fallback font from ['cm' (Computer Modern), 'stix'
                         # 'stixsans'] when a symbol can not be found in one of the
                         # custom math fonts. Select 'None' to not perform fallback
                         # and replace the missing character by a dummy symbol.
-#mathtext.default: it  # The default font to use for math.
+mathtext.default: it  # The default font to use for math.
                        # Can be any of the LaTeX font names, including
                        # the special name "regular" for the same font
                        # used in regular text.
@@ -436,34 +388,6 @@ axes.prop_cycle: cycler('color', ['e81813', 'ff7f0e', '2ca02c', 'd62728', '9467b
 ## ***************************************************************************
 #xaxis.labellocation: center  # alignment of the xaxis label: {left, right, center}
 #yaxis.labellocation: center  # alignment of the yaxis label: {bottom, top, center}
-
-
-## ***************************************************************************
-## * DATES                                                                   *
-## ***************************************************************************
-## These control the default format strings used in AutoDateFormatter.
-## Any valid format datetime format string can be used (see the python
-## `datetime` for details).  For example, by using:
-##     - '%x' will use the locale date representation
-##     - '%X' will use the locale time representation
-##     - '%c' will use the full locale datetime representation
-## These values map to the scales:
-##     {'year': 365, 'month': 30, 'day': 1, 'hour': 1/24, 'minute': 1 / (24 * 60)}
-
-#date.autoformatter.year:        %Y
-#date.autoformatter.month:       %Y-%m
-#date.autoformatter.day:         %Y-%m-%d
-#date.autoformatter.hour:        %m-%d %H
-#date.autoformatter.minute:      %d %H:%M
-#date.autoformatter.second:      %H:%M:%S
-#date.autoformatter.microsecond: %M:%S.%f
-## The reference date for Matplotlib's internal date representation
-## See https://matplotlib.org/stable/gallery/ticks/date_precision_and_epochs.html
-#date.epoch: 1970-01-01T00:00:00
-## 'auto', 'concise':
-#date.converter:                  auto
-## For auto converter whether to use interval_multiples:
-#date.interval_multiples:         True
 
 ## ***************************************************************************
 ## * TICKS                                                                   *
@@ -595,9 +519,9 @@ ytick.direction:     in     # direction: {in, out, inout}
 ## ***************************************************************************
 #image.aspect:          equal        # {equal, auto} or a number
 #image.interpolation:   antialiased  # see help(imshow) for options
-#image.cmap:            viridis      # A colormap name (plasma, magma, etc.)
+image.cmap:            jet      # A colormap name (plasma, magma, etc.)
 #image.lut:             256          # the size of the colormap lookup table
-#image.origin:          upper        # {lower, upper}
+image.origin:          lower        # {lower, upper}
 #image.resample:        True
 #image.composite_image: True  # When True, all the images on a set of axes are
                               # combined into a single composite image before
@@ -667,7 +591,7 @@ contour.linewidth:          0.2    # {float, None} Size of the contour line
 savefig.dpi:       1200      # figure dots per inch or 'figure'
 #savefig.facecolor: auto        # figure face color when saving
 #savefig.edgecolor: auto        # figure edge color when saving
-#savefig.format:    png         # {png, ps, pdf, svg}
+savefig.format:    pdf         # {png, ps, pdf, svg}
 savefig.bbox:      tight    # {tight, standard}
                                 # 'tight' is incompatible with pipe-based animation
                                 # backends (e.g. 'ffmpeg') but will work with those
@@ -718,32 +642,3 @@ savefig.bbox:      tight    # {tight, standard}
 
 ### docstring params
 #docstring.hardcopy: False  # set this when you want to generate hardcopy docstring
-
-
-## ***************************************************************************
-## * ANIMATION                                                               *
-## ***************************************************************************
-#animation.html: none  # How to display the animation as HTML in
-                       # the IPython notebook:
-                       #     - 'html5' uses HTML5 video tag
-                       #     - 'jshtml' creates a JavaScript animation
-#animation.writer:  ffmpeg        # MovieWriter 'backend' to use
-#animation.codec:   h264          # Codec to use for writing movie
-#animation.bitrate: -1            # Controls size/quality trade-off for movie.
-                                  # -1 implies let utility auto-determine
-#animation.frame_format: png      # Controls frame format used by temp files
-
-## Path to ffmpeg binary.  Unqualified paths are resolved by subprocess.Popen.
-#animation.ffmpeg_path:  ffmpeg
-## Additional arguments to pass to ffmpeg.
-#animation.ffmpeg_args:
-
-## Path to ImageMagick's convert binary.  Unqualified paths are resolved by
-## subprocess.Popen, except that on Windows, we look up an install of
-## ImageMagick in the registry (as convert is also the name of a system tool).
-#animation.convert_path: convert
-## Additional arguments to pass to convert.
-#animation.convert_args: -layers, OptimizePlus
-#
-#animation.embed_limit:  20.0     # Limit, in MB, of size of base64 encoded
-                                  # animation in HTML (i.e. IPython notebook)
