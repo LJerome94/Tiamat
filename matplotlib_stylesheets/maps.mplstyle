@@ -113,14 +113,14 @@
 ## ***************************************************************************
 ## See https://matplotlib.org/stable/api/artist_api.html#module-matplotlib.lines
 ## for more information on line properties.
-lines.linewidth: 0.8              # line width in points
+lines.linewidth: 0.5              # line width in points
 #lines.linestyle: -                 # solid line
 #lines.color:     C0                # has no affect on plot(); see axes.prop_cycle
-lines.marker:          None        # the default marker
+lines.marker:          s        # the default marker
 #lines.markerfacecolor: auto        # the default marker face color
 #lines.markeredgecolor: auto        # the default marker edge color
 #lines.markeredgewidth: 1.0         # the line width around the marker symbol
-#lines.markersize:      6           # marker size, in points
+lines.markersize:      2           # marker size, in points
 #lines.dash_joinstyle:  round       # {miter, round, bevel}
 #lines.dash_capstyle:   butt        # {butt, round, projecting}
 #lines.solid_joinstyle: round       # {miter, round, bevel}
@@ -292,7 +292,7 @@ mathtext.fontset: custom  # Should be 'dejavusans' (default),
 ## settings which map a TeX font name to a fontconfig font pattern.  (These
 ## settings are not used for other font sets.)
 mathtext.bf:  serif:bold
-#mathtext.cal: cursive
+mathtext.cal: serif:italic
 mathtext.it:  serif:italic
 mathtext.rm:  serif
 #mathtext.sf:  sans
@@ -362,7 +362,7 @@ mathtext.default: it  # The default font to use for math.
 
 #axes.unicode_minus: True  # use Unicode for the minus symbol rather than hyphen.  See
                            # https://en.wikipedia.org/wiki/Plus_and_minus_signs#Character_codes
-axes.prop_cycle: cycler('color', ['e81813', 'ff7f0e', '2ca02c', 'd62728', '9467bd', '8c564b', 'e377c2', '7f7f7f', 'bcbd22', '17becf'])
+axes.prop_cycle: cycler('color', ['e81813', '147abf', '008b12', 'e26a12', '812593'])
                   # color cycle for plot lines as list of string color specs:
                   # single letter, long name, or web-style hex
                   # As opposed to all other parameters in this file, the color
@@ -448,8 +448,8 @@ ytick.direction:     in     # direction: {in, out, inout}
 ## ***************************************************************************
 ## * LEGEND                                                                  *
 ## ***************************************************************************
-#legend.loc:           best
-#legend.frameon:       True     # if True, draw the legend on a background patch
+legend.loc:           best
+legend.frameon:       False     # if True, draw the legend on a background patch
 #legend.framealpha:    0.8      # legend patch transparency
 #legend.facecolor:     inherit  # inherit from axes.facecolor; or color spec
 #legend.edgecolor:     0.8      # background patch boundary color
@@ -459,7 +459,7 @@ ytick.direction:     in     # direction: {in, out, inout}
 #legend.numpoints:     1        # the number of marker points in the legend line
 #legend.scatterpoints: 1        # number of scatter points
 #legend.markerscale:   1.0      # the relative size of legend markers vs. original
-#legend.fontsize:      medium
+legend.fontsize:      small
 #legend.labelcolor:    None
 #legend.title_fontsize: None    # None sets to the same as the default axes.
 

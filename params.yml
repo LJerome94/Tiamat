@@ -22,10 +22,18 @@
 # max_step: [100]
 # attribute: 'escape_time'
 # ---
-xmin: -2
-xmax: 1
+xmin: -1.81
+xmax: -1.72
 ymin: 0
-ymax: 1.5
-res: 0.001
+ymax: 0.05
+res: 0.0001
 max_step: [100]
-attribute: 'lyapunov'
+attribute: 'escape_time' # Minibrot
+# ---
+# xmin: -2
+# xmax: 1
+# ymin: 0
+# ymax: 1.5
+# res: 0.001
+# max_step: [100]
+# attribute: 'lyapunov'

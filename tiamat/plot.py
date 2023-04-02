@@ -18,22 +18,31 @@ class Plot:
         self.save_name = ''
 
     def save_plot(self, fname: str='', directory: str='') -> None:
-        # TODO
+        """ Saves the plot to a given file name in .pdf format.
 
-        if self.save_name == '' and fname != '':
+        Parameters
+        ----------
+        fname: str
+            The name of the file to be saved. The class establishes one
+            by default based on the imported data file name.
+        directory:
+            The directory to save the file.
+        """
+
+        if fname != '':
             self.save_name = fname
 
         with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
-            self.figure.savefig(fname=directory+self.save_name, dpi=100) # WARNING CHANGER LE DPI
+            self.figure.savefig(fname=directory+self.save_name, dpi=1200)
 
-    def heatmap(self, cmap='jet', cmap_label: str="") -> None:
+    def heatmap(self, cmap='jet', cmap_label: str="", extend: str='none') -> None:
         # TODO
         if self.figure is None and self.axis is None:
             with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
                 self.figure, self.axis = plt.subplots(1,1)
 
-        with plt.style.context('matplotlib_stylesheets/maps.mplstyle'): # WARNING PAS NECESSAIRE?
-            ax = plt.gca()
+        with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
+            ax = plt.gca() # FIXME Changer pour les axes de la classe
 
             im = ax.imshow(self.data_array, extent=self.extent,cmap=cmap)
             ax.set_xlabel("Re $c$")
@@ -44,7 +53,7 @@ class Plot:
             divider = make_axes_locatable(ax)
             cax = divider.append_axes("right", size="5%", pad=0.05)
 
-            plt.colorbar(im, cax=cax, label=cmap_label)
+            plt.colorbar(im, cax=cax, label=cmap_label, extend=extend)
 
     def contour(self) -> None:
         # TODO Documentation
@@ -55,13 +64,15 @@ class Plot:
         with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
             self.save_name = self.save_name.replace("escape_time", "contour")
 
+            self.axis.set_aspect('equal')
+
             plt.contour(1*(self.data_array==self.data_array.max()),
                         colors=['w', 'k'],
                         extent=self.extent,
                         levels=1)
 
             plt.xlabel("Re $c$")
-            plt.xlabel("Im $c$")
+            plt.ylabel("Im $c$")
 
     def orbit(self, x: list[float], y: list[float]) -> None:
         """Plots the orbit on the complex plane given a list of coordinates.
@@ -72,8 +83,11 @@ class Plot:
 
         """
         with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
-            plt.plot(x, y)
+            plt.plot(x, y, markevery=[0], label=f"({x[0]}, {y[0]})")
 
+    def legend(self) -> None:
+        with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
+            self.axis.legend(loc=0)
 
     def load_data(self, fname: str, flip: bool=False) -> None:
         # TODO
