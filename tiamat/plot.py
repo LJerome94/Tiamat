@@ -44,7 +44,7 @@ class Plot:
             divider = make_axes_locatable(ax)
             cax = divider.append_axes("right", size="5%", pad=0.05)
 
-            plt.colorbar(im, cax=cax,label=cmap_label)
+            plt.colorbar(im, cax=cax, label=cmap_label)
 
     def contour(self) -> None:
         # TODO Documentation

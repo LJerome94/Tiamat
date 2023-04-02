@@ -86,7 +86,7 @@ class Mandelbrot:
         self.cardioid_mask = mask_card * mask_circ
 
 
-    def next_iteration(self, use_mask: bool) -> None:
+    def next_iteration(self, use_mask: str) -> None:
         """Performs one iteration of the qaudratic map over the specified
         domain.
 
@@ -94,15 +94,20 @@ class Mandelbrot:
         ----------
         use_mask: bool
             Whether to use logic masks on the involved arrays in order to avoid
-            some redundant computations
+            some redundant computations.
         """
 
-        if use_mask:
+        if use_mask == 'both':
             self.zn = np.where(self.mask*self.cardioid_mask, # Condition
                                quadratic_map(self.zn, self.domain), # If True
                                self.zn) # If false
             self.mask = squared_magnitude(self.zn) < 4
-        else:
+        elif use_mask == 'norm':
+            self.zn = np.where(self.mask, # Condition
+                               quadratic_map(self.zn, self.domain), # If True
+                               self.zn) # If false
+            self.mask = squared_magnitude(self.zn) < 4
+        elif use_mask == 'none':
             self.zn = quadratic_map(self.zn, self.domain)
 
         self.step += 1
@@ -126,7 +131,7 @@ class Mandelbrot:
 
         progress_str = f"Computing escape time for {max_iteration_number} iterations..."
         for i in track(range(max_iteration_number), progress_str):
-            self.next_iteration(True)
+            self.next_iteration('both')
 
             self.escape_time = np.where(self.mask*self.cardioid_mask, # Condition
                                         self.escape_time + 1, # If true
@@ -149,16 +154,16 @@ class Mandelbrot:
 
         progress_str = f"Computing lyapunov exponents for {max_iteration_number} iterations..."
         for i in track(range(max_iteration_number), progress_str):
-            self.next_iteration(True)
+            self.next_iteration('norm')
 
             self.lyapunov = np.where(self.mask, # Condition
                                         self.lyapunov + np.log(squared_magnitude(2*self.zn)), # If true
                                         np.inf) # If false
 
         # Add maximum values in the cardioid and the first bulb
-        self.lyapunov = np.where(self.cardioid_mask, # Condition
-                                    self.lyapunov, # If true
-                                    -np.inf) # If false
+        #self.lyapunov = np.where(self.cardioid_mask, # Condition
+        #                            self.lyapunov, # If true
+        #                            -np.inf) # If false
         self.lyapunov /= max_iteration_number
 
 

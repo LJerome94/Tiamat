@@ -31,7 +31,10 @@ def process():
             table.add_row("Resolution", str(res))
 
             print(f"Constructing Mandelbrot object...\n")
+
             M = Mandelbrot((xmin, xmax),(ymin,ymax),res)
+
+            table.add_row("Dimensions", str(M.domain.shape))
 
             console.print(table)
 
@@ -39,7 +42,7 @@ def process():
                 if attribute == 'escape_time':
                     M.compute_escape_time(N)
                 elif attribute == 'lyapunov':
-                    pass # TODO Faire l'exposant de lyapunov
+                    M.compute_lyapunov(N)
                 print("Saving data...")
                 M.save(attribute, path="./data")
 

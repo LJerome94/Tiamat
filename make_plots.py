@@ -24,6 +24,7 @@ def escape_time_plots(file_patern: str) -> None:
         plot.heatmap(cmap_label="Temps d'évasion")  # TODO checker pour si faut flipper
         plot.save_plot(directory='./figures/')
 
+
 def orbit_plots(file: str, complex_start_points: list[complex]) -> None:
     # TODO
 
