@@ -13,11 +13,16 @@ class Mandelbrot:
     """
 
     step: int
+    x_min: float
+    x_max: float
+    y_min: float
+    y_max: float
+    res: float
     domain: np.ndarray
     zn: np.ndarray
     escape_time: np.ndarray
     mask: np.ndarray
-    res:float
+    lyapunov: np.ndarray
 
     def __init__(self,
                  x_bounds: tuple[float, float],
@@ -117,7 +122,7 @@ class Mandelbrot:
         self.make_cardioid_mask()
 
         self.escape_time = np.zeros(self.domain.shape, dtype=int)
-        self.step=0
+        self.step = 0
 
         progress_str = f"Computing escape time for {max_iteration_number} iterations..."
         for i in track(range(max_iteration_number), progress_str):
@@ -132,7 +137,33 @@ class Mandelbrot:
                                     self.escape_time, # If true
                                     max_iteration_number) # If false
 
+    def compute_lyapunov(self, max_iteration_number) -> None:
+        # TODO
+
+        self.step = 0
+
+        self.lyapunov = np.log(2*squared_magnitude(self.zn))
+
+        self.mask = squared_magnitude(self.zn) < 4
+        self.make_cardioid_mask()
+
+        progress_str = f"Computing lyapunov exponents for {max_iteration_number} iterations..."
+        for i in track(range(max_iteration_number), progress_str):
+            self.next_iteration(True)
+
+            self.lyapunov = np.where(self.mask, # Condition
+                                        self.lyapunov + np.log(squared_magnitude(2*self.zn)), # If true
+                                        np.inf) # If false
+
+        # Add maximum values in the cardioid and the first bulb
+        self.lyapunov = np.where(self.cardioid_mask, # Condition
+                                    self.lyapunov, # If true
+                                    -np.inf) # If false
+        self.lyapunov /= max_iteration_number
+
+
     def save(self, attribute: str, path: str="./") -> None:
+        # TODO
 
         params_string = f"x_{self.x_min}_{self.x_max}_y_{self.y_min}_{self.y_max}_res_{self.res}_step_{self.step}"
 
