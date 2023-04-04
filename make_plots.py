@@ -5,6 +5,7 @@ The scripts produces the plots needed for my project report.
 
 from glob import glob
 
+import numpy as np
 from rich.console import Console
 
 from tiamat.mandelbrot import orbit
@@ -44,25 +45,32 @@ def escape_time_plots(file_patern: str) -> None:
 def orbit_plots(file: str, complex_start_points: list[complex]) -> None:
     # TODO
 
-    print("Plotting orbit figure for:")
+    print("Plotting orbit figures for:")
     console = Console()
     console.print(file)
 
-    plot = Plot()
-    plot.load_data(file, flip=True)
+    plot_map = Plot()
+    plot_norm = Plot(nrows=len(complex_start_points))
 
-    plot.contour()
+    plot_map.load_data(file, flip=True)
 
-    plot.axis.set_ylim(-1,1)
-    plot.axis.set_xlim(-1.5,.5)
+    plot_map.contour()
 
-    for c in complex_start_points:
-        orb = orbit(c,10)
-        plot.orbit(orb.real, orb.imag)
+    plot_map.axis.set_ylim(-1,1)
+    plot_map.axis.set_xlim(-1.5,.5)
 
-    plot.legend()
+    orbits = np.array([orbit(c,10) for c in complex_start_points])
 
-    plot.save_plot(fname='orbits.pdf',directory='./figures/')
+    for orb in orbits:
+        plot_map.orbit(orb.real, orb.imag)
+        plot_norm.norms(np.abs(orb))
+
+    plot_map.legend()
+
+    plot_map.save_plot(fname='orbits_map.pdf', directory='./figures/')
+
+    plot_norm.save_plot(fname='orbits_norm.pdf', directory='./figures/')
+
 
 
 if __name__ == '__main__':

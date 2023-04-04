@@ -11,11 +11,15 @@ class Plot:
     save_name: str
     extent: tuple[float, float, float, float]
 
-    def __init__(self):
+    def __init__(self, nrows: int=1, ncols: int=1):
         # TODO
         self.figure = None
         self.axis = None
         self.save_name = ''
+        self.nrows = nrows
+        self.ncols = ncols
+        self.current_plot = 0
+
 
     def save_plot(self, fname: str='', directory: str='') -> None:
         """ Saves the plot to a given file name in .pdf format.
@@ -82,8 +86,37 @@ class Plot:
         # TODO
 
         """
+        if self.figure is None:
+            with plt.style.context("matplotlib_stylesheets/maps.mplstyle"):
+                self.figure, self.axis = plt.subplots(1,1)
+
         with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
-            plt.plot(x, y, markevery=[0], label=f"({x[0]}, {y[0]})")
+            self.axis.plot(x, y, markevery=[0], label=f"({x[0]}, {y[0]})")
+
+    def norms(self, norms: list[float]) -> None:
+        # TODO DOCS
+
+        if self.figure is None:
+
+            with plt.style.context("matplotlib_stylesheets/maps.mplstyle"):
+                self.figure, self.axis = plt.subplots(ncols=self.ncols,
+                                                      nrows=self.nrows,
+                                                      sharey=True,
+                                                      sharex=True,
+                                                      figsize=(5,5))
+
+                plt.xlabel("$n$")
+                self.figure.text(-0.03, 0.5, '$|z_n|^2$', va='center', rotation='vertical')
+
+        with plt.style.context("matplotlib_stylesheets/maps.mplstyle"):
+            colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+
+            self.axis[self.current_plot].plot(np.arange(len(norms)),
+                                              norms,
+                                              c=colors[self.current_plot])
+        self.current_plot += 1
+
+
 
     def legend(self) -> None:
         with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
