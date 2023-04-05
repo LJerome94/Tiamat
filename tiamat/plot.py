@@ -1,4 +1,9 @@
-import cmasher as cm
+"""plots.py - Jérôme Leblanc
+
+This file contains a plot class built on top of matplotlib to avoid redundancy
+when plotting results.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.axes_grid1 import make_axes_locatable
