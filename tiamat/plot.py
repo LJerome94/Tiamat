@@ -10,14 +10,13 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 class Plot:
-    # TODO
+    """A class that handles plots related to the Mandelbrot class."""
 
     data_array: np.ndarray
     save_name: str
     extent: tuple[float, float, float, float]
 
     def __init__(self, nrows: int=1, ncols: int=1):
-        # TODO
         self.figure = None
         self.axis = None
         self.save_name = ''
@@ -45,13 +44,15 @@ class Plot:
             self.figure.savefig(fname=directory+self.save_name, dpi=1200)
 
     def heatmap(self, cmap='jet', cmap_label: str="", extend: str='none') -> None:
-        # TODO
+        """ Plots a heatmap.
+        """
+
         if self.figure is None and self.axis is None:
             with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
                 self.figure, self.axis = plt.subplots(1,1)
 
         with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
-            ax = plt.gca() # FIXME Changer pour les axes de la classe
+            ax = plt.gca()
 
             im = ax.imshow(self.data_array, extent=self.extent,cmap=cmap)
             ax.set_xlabel("Re $c$")
@@ -65,7 +66,9 @@ class Plot:
             plt.colorbar(im, cax=cax, label=cmap_label, extend=extend)
 
     def contour(self) -> None:
-        # TODO Documentation
+        """Plots the contour of a Mandelbrot maximum escape time.
+        """
+
         if self.figure is None and self.axis is None:
             with plt.style.context('matplotlib_stylesheets/maps.mplstyle'):
                 self.figure, self.axis = plt.subplots(1,1)
@@ -88,7 +91,10 @@ class Plot:
 
         Parameters
         ----------
-        # TODO
+        x: list[float]
+            List of x coordinates.
+        y: list[float]
+            List of y coordinates.
 
         """
         if self.figure is None:
@@ -99,7 +105,8 @@ class Plot:
             self.axis.plot(x, y, markevery=[0], label=f"({x[0]}, {y[0]})")
 
     def norms(self, norms: list[float]) -> None:
-        # TODO DOCS
+        """ Produces plots of the norms of complex trajectories.
+        """
 
         if self.figure is None:
 
@@ -111,7 +118,7 @@ class Plot:
                                                       figsize=(5,5))
 
                 plt.xlabel("$n$")
-                self.figure.text(-0.03, 0.5, '$|z_n|^2$', va='center', rotation='vertical')
+                self.figure.text(-0.03, 0.5, '$|z_n|$', va='center', rotation='vertical')
 
         with plt.style.context("matplotlib_stylesheets/maps.mplstyle"):
             colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
@@ -128,7 +135,10 @@ class Plot:
             self.axis.legend(loc=0)
 
     def load_data(self, fname: str, flip: bool=False) -> None:
-        # TODO
+        """ Load data arrays from files and parses the file's name into
+        reusable data for the plots.
+        """
+
         self.data_array = np.load(fname, allow_pickle=False)
 
         self.save_name = fname.split("mandelbrot_")[1].split(".npy")[0]

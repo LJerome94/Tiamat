@@ -1,3 +1,7 @@
+""" main.py - Jérôme Leblanc
+
+The main script used to perform simulations from the `./tiamat/` module.
+"""
 import yaml
 from rich.console import Console
 from rich.table import Table
@@ -6,7 +10,10 @@ from tiamat.mandelbrot import Mandelbrot
 
 
 def process():
-    # TODO DOC
+    """ This function runs the code for the simulations from the parameters
+    specified in `./params.yaml`.
+    """
+
     with open('params.yml', 'r') as file:
         simulations = yaml.safe_load_all(file)
 
@@ -45,6 +52,7 @@ def process():
                     M.compute_lyapunov(N)
                 print("Saving data...")
                 M.save(attribute, path="./data")
+
 
 if __name__ == '__main__':
     console = Console()

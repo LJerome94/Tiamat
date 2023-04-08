@@ -47,7 +47,8 @@ def escape_time_plots(file_patern: str) -> None:
 
 
 def orbit_plots(file: str, complex_start_points: list[complex]) -> None:
-    # TODO
+    """Produces the plot of the orbits with the countour of the Mandelbrot
+    set."""
 
     print("Plotting orbit figures for:")
     console = Console()
@@ -77,7 +78,7 @@ def orbit_plots(file: str, complex_start_points: list[complex]) -> None:
 
 
 def lyapunov_plot(file: str) -> None:
-    # TODO
+    """Plots the heatmap of the Lyapunov exponenet inside the Mandelbrot set."""
 
     print("Plotting lyapunov figures for:")
     console = Console()
@@ -98,19 +99,19 @@ def lyapunov_plot(file: str) -> None:
 
         plt.colorbar(im, cax=cax, label="$\lambda$",extend='both')
 
-        #plt.xlim(-1.5,0.5)
         plot_f.axis.set_xlim(-1.5, 0.5)
-        #plt.ylim(-1,1)
         plot_f.axis.set_ylim(-1, 1)
-        #plt.ylabel("Im $c$")
         plot_f.axis.set_ylabel("Im $c$")
         plot_f.axis.set_xlabel("Re $c$")
-        #plt.xlabel("Re $c$")
         plot_f.save_plot(fname='lyapunov.pdf', directory='./figures/')
 
 
 def lyapunov_orbit_plot(file: str) -> None:
-    # TODO
+    """Plots the heatmap of the Lyapunov exponenet inside the Mandelbrot set.
+    It also reduces the alpha of the colormap.
+    +
+    Plots orbits on top of the heatmap.
+    """
 
     print("Plotting lyapunov + orbits figures for:")
     console = Console()
@@ -132,9 +133,7 @@ def lyapunov_orbit_plot(file: str) -> None:
 
         plt.colorbar(im, cax=cax, label="$\lambda$",extend='both')
 
-        #plt.xlim(-1.5,0.5)
         plot_f.axis.set_xlim(-1.5, 0.5)
-        #plt.ylim(-1,1)
         plot_f.axis.set_ylim(-1, 1)
         plot_f.axis.set_ylabel("Im $c$")
         plot_f.axis.set_xlabel("Re $c$")
@@ -145,12 +144,6 @@ def lyapunov_orbit_plot(file: str) -> None:
         points = np.array([orbit(initial_points*a, 4) for a in scales])
         for p in points:
             plot_f.axis.plot(p.real, p.imag, c='k', markevery=[0])
-        #
-        #initial_points = (1e-2/np.sqrt(2)-2e-2j/np.sqrt(2))
-        #scales = np.linspace(1, 30, num=15)
-        #points = np.array([orbit(initial_points*a, 4) for a in scales])
-        #for p in points:
-        #    plot_f.axis.plot(p.real, p.imag, c='k', markevery=[0])
         #
         initial_points = (-1e-2/np.sqrt(2)+1e-2j/np.sqrt(2))
         scales = np.linspace(1, 25, num=10)
@@ -169,13 +162,9 @@ if __name__ == '__main__':
 
     #escape_time_plots("./data/*escape_time_*y_0_0.05*res_0.0001*")
 
-    #orbit_plots("./data/mandelbrot_escape_time_x_-2_1_y_0_1.5_res_0.001_step_100.npy",
-    #            [-.12-.75j, -0.5+0.56j, 0.275+0.525j, -1.3, 0.38-0.34j])
+    orbit_plots("./data/mandelbrot_escape_time_x_-2_1_y_0_1.5_res_0.001_step_100.npy",
+                [-.12-.75j, -0.5+0.56j, 0.275+0.525j, -1.3, 0.38-0.34j])
 
-
-    #orbit_plots("./data/mandelbrot_escape_time_x_-2_1_y_0_1.5_res_0.001_step_100.npy",
-    #            [])
-
-    lyapunov_orbit_plot("./data/mandelbrot_lyapunov_x_-2_1_y_0_1.5_res_0.001_step_100.npy")
+    #lyapunov_orbit_plot("./data/mandelbrot_lyapunov_x_-2_1_y_0_1.5_res_0.001_step_100.npy")
 
     console.print("\nEnd of program.", style='green')

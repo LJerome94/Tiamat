@@ -1,5 +1,7 @@
-"""
-TODO HEADER
+""" mandelbrot.py - Jérôme Leblanc
+
+This files contains the class and functions required to compute various values
+and trajectories of the Mandelbrot set.
 """
 
 import numpy as np
@@ -8,8 +10,8 @@ from rich.progress import track
 
 
 class Mandelbrot:
-    """
-    TODO Documentation
+    """ A class that contains Mandelbrot set related values such as its domain,
+    escape time, and Lyapunov exponents
     """
 
     step: int
@@ -64,8 +66,8 @@ class Mandelbrot:
 
 
     def make_cardioid_mask(self) -> None:
-        """
-        TODO
+        """ This creates a mask array the same size as `self.domain` to avoid
+        computing values inside the main cardioid and the 1/2 bulb.
         """
         # Main cardioid
         a=1/2
@@ -143,7 +145,14 @@ class Mandelbrot:
                                     max_iteration_number) # If false
 
     def compute_lyapunov(self, max_iteration_number) -> None:
-        # TODO
+        """ Computes the Lyapunov exponents inside the Mandelbrot set.
+
+        Parameters
+        ----------
+        max_iteration_number: int
+            The number of iterations to perform in order to compute the Lyapunov
+            exponents.
+        """
 
         self.step = 0
 
@@ -160,42 +169,80 @@ class Mandelbrot:
                                         self.lyapunov + np.log(squared_magnitude(2*self.zn)), # If true
                                         np.inf) # If false
 
-        # Add maximum values in the cardioid and the first bulb
-        #self.lyapunov = np.where(self.cardioid_mask, # Condition
-        #                            self.lyapunov, # If true
-        #                            -np.inf) # If false
         self.lyapunov /= max_iteration_number
 
 
     def save(self, attribute: str, path: str="./") -> None:
-        # TODO
+        """ Saves the specified attribute as a .npy file.
+
+        Parameters
+        ----------
+        attribute: str
+            The name of the class attribute to save.
+        path: str
+            The path where to save the file. Defaults to './'.
+        """
 
         params_string = f"x_{self.x_min}_{self.x_max}_y_{self.y_min}_{self.y_max}_res_{self.res}_step_{self.step}"
 
         saved_array = getattr(self, attribute)
 
-        np.save(f"{path}/mandelbrot_{attribute}_{params_string}", saved_array, allow_pickle=False) # TODO Checker que ça existe
+        np.save(f"{path}/mandelbrot_{attribute}_{params_string}", saved_array, allow_pickle=False)
 
 
 @jit(nopython=True)
-def quadratic_map(z, c): # TODO Vectorize?
-    """
-    TODO Documentation
+def quadratic_map(z, c):
+    """ Computes the quadratic map f(z, c) = z^2 + c.
+
+    Parameters
+    ----------
+    z: numpy.ndarray
+        Array of complex values.
+    c: numpy.ndarray
+        Array of complex values.
+
+    Returns
+    -------
+    out: numpy.ndarray
+        z^2 + c
     """
     return z*z+c
 
 @jit(nopython=True)
 def squared_magnitude(z: np.ndarray) -> np.ndarray:
-    """
-    TODO DOCUMENTATION
+    """Compute the squared magnitudes of complex values inside an array.
+    Optimized with Numba.
+
+    Parameters
+    ----------
+    z: numpy.ndarray
+        Array of complex values.
+
+    Returns
+    -------
+    out: numpy.ndarray
+        Array of the squared magnitudes.
+
     """
     x, y = z.real, z.imag
     return x * x + y * y
 
 
 def orbit(start_point: np.complex128, num_iteration: int) -> np.ndarray:
-    """
-    # TODO DOCUMENTATION
+    """ Computes the orbit of a given point under the Mandelbrot quadratic map
+    for a given number of iterations.
+
+    Parameters
+    ----------
+    start_point: numpy.complex128
+        The starting point of the orbit
+    num_itertaions: int
+
+    Returns
+    -------
+    out: numpy.ndarray
+        The points of the trajectory. It is a complex valued 1d array of length
+        `num_iteration`.
     """
     Z = np.zeros(num_iteration, dtype=np.complex128)
     Z[0] = start_point
